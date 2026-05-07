@@ -6,10 +6,12 @@ import respx
 
 from verified_human_mcp_server import client
 
+BASE = "https://test.verifiedhumancert.com"
+
 
 @pytest.fixture(autouse=True)
 def _set_base_url(monkeypatch):
-    monkeypatch.setattr(client, "VHC_BASE_URL", "https://test.verifiedhumancert.com")
+    monkeypatch.setattr(client, "VHC_BASE_URL", BASE)
 
 
 class TestVerifyByIsrc:
@@ -24,7 +26,7 @@ class TestVerifyByIsrc:
             "tier": "gold",
         }
         respx.get(
-            "https://test.verifiedhumancert.com/api/v1/verify",
+            f"{BASE}/api/v1/verify",
             params={"isrc": "USHM82148308"},
         ).mock(return_value=httpx.Response(200, json=payload))
 
@@ -35,7 +37,7 @@ class TestVerifyByIsrc:
     @respx.mock
     def test_not_found(self):
         respx.get(
-            "https://test.verifiedhumancert.com/api/v1/verify",
+            f"{BASE}/api/v1/verify",
             params={"isrc": "XXXXXXXXXXXX"},
         ).mock(return_value=httpx.Response(200, json={"certified": False}))
 
@@ -45,7 +47,7 @@ class TestVerifyByIsrc:
     @respx.mock
     def test_server_error(self):
         respx.get(
-            "https://test.verifiedhumancert.com/api/v1/verify",
+            f"{BASE}/api/v1/verify",
             params={"isrc": "BAD"},
         ).mock(return_value=httpx.Response(500, text="Internal Server Error"))
 
@@ -58,7 +60,7 @@ class TestStatusByArtistTrack:
     def test_found(self):
         payload = {"certified": True, "certNumber": "VH-2026-000042"}
         respx.get(
-            "https://test.verifiedhumancert.com/api/v1/status",
+            f"{BASE}/api/v1/status",
             params={"artist": "The Beatles", "track": "Yesterday"},
         ).mock(return_value=httpx.Response(200, json=payload))
 
@@ -71,7 +73,7 @@ class TestVerifyByCertNumber:
     def test_found(self):
         payload = {"certNumber": "VH-2026-000001", "artist": "Test", "status": "active"}
         respx.get(
-            "https://test.verifiedhumancert.com/api/certifications/verify/VH-2026-000001",
+            f"{BASE}/api/certifications/verify/VH-2026-000001",
         ).mock(return_value=httpx.Response(200, json=payload))
 
         result = client.verify_by_cert_number("VH-2026-000001")
@@ -82,7 +84,7 @@ class TestRecentRegistry:
     @respx.mock
     def test_returns_list(self):
         payload = [{"certNumber": "VH-2026-000001"}, {"certNumber": "VH-2026-000002"}]
-        respx.get("https://test.verifiedhumancert.com/api/registry/recent").mock(
+        respx.get(f"{BASE}/api/registry/recent").mock(
             return_value=httpx.Response(200, json=payload)
         )
 
@@ -92,7 +94,7 @@ class TestRecentRegistry:
     @respx.mock
     def test_returns_wrapped(self):
         payload = {"certifications": [{"certNumber": "VH-2026-000001"}]}
-        respx.get("https://test.verifiedhumancert.com/api/registry/recent").mock(
+        respx.get(f"{BASE}/api/registry/recent").mock(
             return_value=httpx.Response(200, json=payload)
         )
 
@@ -104,7 +106,7 @@ class TestStats:
     @respx.mock
     def test_registry_stats(self):
         payload = {"total": 150, "tiers": {"gold": 10, "silver": 50, "bronze": 90}}
-        respx.get("https://test.verifiedhumancert.com/api/registry/stats").mock(
+        respx.get(f"{BASE}/api/registry/stats").mock(
             return_value=httpx.Response(200, json=payload)
         )
 
@@ -114,7 +116,7 @@ class TestStats:
     @respx.mock
     def test_certification_stats(self):
         payload = {"totalCertified": 200}
-        respx.get("https://test.verifiedhumancert.com/api/certifications/stats").mock(
+        respx.get(f"{BASE}/api/certifications/stats").mock(
             return_value=httpx.Response(200, json=payload)
         )
 
@@ -126,7 +128,7 @@ class TestPricing:
     @respx.mock
     def test_pricing(self):
         payload = {"single": 29.99, "bundle_5": 99.99}
-        respx.get("https://test.verifiedhumancert.com/api/certifications/pricing").mock(
+        respx.get(f"{BASE}/api/certifications/pricing").mock(
             return_value=httpx.Response(200, json=payload)
         )
 
