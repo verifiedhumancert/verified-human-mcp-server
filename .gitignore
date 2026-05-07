@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+dist/
+*.egg-info/
+.env
+.env.*
+poetry.lock
+.ruff_cache/
+.pytest_cache/
+.DS_Store
+*.log
+.idea/
+.vscode/

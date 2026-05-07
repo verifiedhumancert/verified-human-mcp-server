@@ -1,0 +1,33 @@
+[project]
+name = "verified-human-mcp-server"
+version = "0.1.0"
+description = "MCP server for querying the Verified Human Cert registry — verify human-made music certifications by ISRC, artist, track, or cert number"
+authors = [
+    {name = "Verified Human, Inc."},
+    {name = "MusicTech Lab"},
+]
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "mcp[cli]>=1.0.0",
+    "httpx>=0.28.0",
+]
+
+[tool.poetry]
+packages = [{include = "verified_human_mcp_server", from = "src"}]
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+
+[dependency-groups]
+dev = [
+    "ruff (>=0.15.0,<1.0.0)",
+    "pytest (>=9.0.2,<10.0.0)",
+    "pytest-asyncio (>=1.0.0,<2.0.0)",
+    "respx (>=0.22.0,<1.0.0)",
+]
