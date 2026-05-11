@@ -3,7 +3,7 @@
 MCP server for querying the [Verified Human Cert](https://verifiedhumancert.com) registry — verify human-made music certifications by ISRC, artist, track, or cert number.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![CI](https://github.com/verifiedhumancert/verified-human-mcp-server/actions/workflows/ci.yml/badge.svg)](https://github.com/verifiedhumancert/verified-human-mcp-server/actions/workflows/ci.yml)
+[![CI](https://github.com/verifiedhuman/verified-human-mcp-server/actions/workflows/ci.yml/badge.svg)](https://github.com/verifiedhuman/verified-human-mcp-server/actions/workflows/ci.yml)
 
 ## What is Verified Human Cert?
 
@@ -109,7 +109,7 @@ Agent 2 (verified-human-mcp-server): vhc_verify_isrc("USHM82148308") -> certifie
 
 ```bash
 # Clone the repo
-git clone https://github.com/verifiedhumancert/verified-human-mcp-server.git
+git clone https://github.com/verifiedhuman/verified-human-mcp-server.git
 cd verified-human-mcp-server
 
 # Install dependencies

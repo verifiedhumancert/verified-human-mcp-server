@@ -6,7 +6,6 @@ dist/
 *.egg-info/
 .env
 .env.*
-!.env.example
 poetry.lock
 .ruff_cache/
 .pytest_cache/
@@ -14,13 +13,4 @@ poetry.lock
 *.log
 .idea/
 .vscode/
-
-# Audit reports (mtl-audit MCP tooling output)
-.mtl/
-
-# Coverage artifacts
-.coverage
-coverage.xml
-
-# Project-scope MCP config (contains machine-specific absolute paths)
-.mcp.json
+.mtl
