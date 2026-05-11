@@ -43,12 +43,28 @@ poetry run python -m verified_human_mcp_server
 
 ### Add to Claude Code
 
-Add this to your `~/.claude/settings.json` or project `.claude/settings.local.json`:
+Use the `claude mcp add` CLI (recommended) — it writes to the correct config file for you:
+
+```bash
+# User scope (available in all projects)
+claude mcp add vhc --scope user -- poetry --directory /path/to/verified-human-mcp-server run python -m verified_human_mcp_server
+
+# Or project scope (committed to repo, shared with team via .mcp.json)
+claude mcp add vhc --scope project -- poetry --directory /path/to/verified-human-mcp-server run python -m verified_human_mcp_server
+```
+
+#### Manual configuration
+
+If you prefer to edit config files by hand, add an entry under `mcpServers` in one of:
+
+- **User scope** — `~/.claude.json` (not `~/.claude/settings.json` — that file does not read `mcpServers`)
+- **Project scope** — `.mcp.json` at the repo root (version-controlled, shared with the team)
 
 ```json
 {
   "mcpServers": {
     "vhc": {
+      "type": "stdio",
       "command": "poetry",
       "args": ["--directory", "/path/to/verified-human-mcp-server", "run", "python", "-m", "verified_human_mcp_server"]
     }
@@ -56,11 +72,17 @@ Add this to your `~/.claude/settings.json` or project `.claude/settings.local.js
 }
 ```
 
+After editing, restart Claude Code (or run `/mcp` to reconnect) and verify with `claude mcp list`.
+
 ### Environment Variables
 
 | Variable | Purpose | Default |
 |----------|---------|---------|
 | `VHC_API_URL` | Base URL for the VHC API | `https://verifiedhumancert.com` |
+| `VHC_API_TIMEOUT` | HTTP request timeout in seconds | `15.0` |
+| `VHC_API_RETRIES` | Max retry attempts on transient errors and 5xx | `2` |
+| `VHC_API_BACKOFF` | Base delay (seconds) for exponential retry backoff | `0.5` |
+| `VHC_LOG_LEVEL` | Server log level on stderr (`DEBUG`/`INFO`/`WARNING`/`ERROR`) | `WARNING` |
 
 ## Usage Examples
 

@@ -9,23 +9,68 @@ on:
 jobs:
   lint:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
     steps:
       - uses: actions/checkout@v4
+      - uses: snok/install-poetry@v1
+        with:
+          version: "2.0.1"
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
-      - run: pip install poetry
-      - run: poetry install
+          python-version: ${{ matrix.python-version }}
+          cache: "poetry"
+      - run: poetry install --no-interaction
       - run: poetry run ruff check .
       - run: poetry run ruff format --check .
 
   test:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
     steps:
       - uses: actions/checkout@v4
+      - uses: snok/install-poetry@v1
+        with:
+          version: "2.0.1"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: "poetry"
+      - run: poetry install --no-interaction
+      - run: poetry run pytest --cov=verified_human_mcp_server --cov-report=term-missing --cov-report=xml --cov-fail-under=80
+      - uses: actions/upload-artifact@v4
+        if: matrix.python-version == '3.12'
+        with:
+          name: coverage-xml
+          path: coverage.xml
+
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Scan for secrets (gitleaks)
+        env:
+          GITLEAKS_VERSION: "8.18.4"
+        run: |
+          curl -sSL "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz" | tar -xz gitleaks
+          ./gitleaks detect --source=. --no-banner --exit-code=1
+      - uses: snok/install-poetry@v1
+        with:
+          version: "2.0.1"
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: pip install poetry
-      - run: poetry install
-      - run: poetry run pytest
+          cache: "poetry"
+      - name: Export resolved dependencies
+        run: |
+          poetry self add poetry-plugin-export
+          poetry export --without-hashes --format requirements.txt --output requirements-audit.txt
+      - name: Scan dependencies for CVEs (pip-audit)
+        run: pipx run pip-audit -r requirements-audit.txt

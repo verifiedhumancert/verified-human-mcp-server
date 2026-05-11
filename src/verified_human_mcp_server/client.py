@@ -1,21 +1,38 @@
 """HTTP client for the Verified Human Cert public REST API."""
 
 import os
+import time
 
 import httpx
 
 VHC_BASE_URL = os.environ.get("VHC_API_URL", "https://verifiedhumancert.com")
 
-_TIMEOUT = 15.0
+_TIMEOUT = float(os.environ.get("VHC_API_TIMEOUT", "15.0"))
+_MAX_RETRIES = int(os.environ.get("VHC_API_RETRIES", "2"))
+_BACKOFF_BASE = float(os.environ.get("VHC_API_BACKOFF", "0.5"))
 
 
 def _get(path: str, params: dict | None = None) -> dict | list:
-    """Send a GET request to the VHC API and return parsed JSON."""
+    """Send a GET request to the VHC API and return parsed JSON.
+
+    Retries idempotent GETs on transient transport errors and 5xx responses,
+    with exponential backoff up to ``_MAX_RETRIES`` extra attempts.
+    """
     url = f"{VHC_BASE_URL}{path}"
     with httpx.Client(timeout=_TIMEOUT) as client:
-        resp = client.get(url, params=params)
-        resp.raise_for_status()
-        return resp.json()
+        for attempt in range(_MAX_RETRIES + 1):
+            try:
+                resp = client.get(url, params=params)
+            except httpx.TransportError:
+                if attempt >= _MAX_RETRIES:
+                    raise
+                time.sleep(_BACKOFF_BASE * (2**attempt))
+                continue
+            if resp.status_code >= 500 and attempt < _MAX_RETRIES:
+                time.sleep(_BACKOFF_BASE * (2**attempt))
+                continue
+            resp.raise_for_status()
+            return resp.json()
 
 
 def verify_by_isrc(isrc: str) -> dict:

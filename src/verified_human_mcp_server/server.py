@@ -1,6 +1,7 @@
 """MCP server exposing Verified Human Cert tools for Claude Code."""
 
 import json
+import logging
 from collections.abc import Callable
 from typing import Any
 
@@ -8,6 +9,8 @@ import httpx
 from mcp.server.fastmcp import FastMCP
 
 from . import client
+
+logger = logging.getLogger(__name__)
 
 mcp = FastMCP(
     "verified-human-mcp-server",
@@ -20,16 +23,25 @@ mcp = FastMCP(
 
 
 def _call(fn: Callable[..., Any], *args: Any, **kwargs: Any) -> str:
-    """Call a client function and return JSON, with unified error handling."""
+    """Call a client function and return JSON, with unified error handling.
+
+    Catches every httpx error class and converts it to a structured JSON
+    response, so the MCP client receives a valid tool result instead of a
+    server-side traceback. All caught exceptions are logged to stderr.
+    """
     try:
         result = fn(*args, **kwargs)
         return json.dumps(result, indent=2, ensure_ascii=False)
     except httpx.HTTPStatusError as e:
+        logger.exception(
+            "Upstream HTTP %s for %s", e.response.status_code, e.request.url
+        )
         return json.dumps(
             {"error": f"HTTP {e.response.status_code}", "detail": e.response.text}
         )
-    except httpx.ConnectError as e:
-        return json.dumps({"error": "Connection failed", "detail": str(e)})
+    except httpx.RequestError as e:
+        logger.exception("Upstream request error: %s", type(e).__name__)
+        return json.dumps({"error": type(e).__name__, "detail": str(e)})
 
 
 @mcp.tool()

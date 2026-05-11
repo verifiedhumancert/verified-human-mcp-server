@@ -12,6 +12,7 @@ BASE = "https://test.verifiedhumancert.com"
 @pytest.fixture(autouse=True)
 def _set_base_url(monkeypatch):
     monkeypatch.setattr(client, "VHC_BASE_URL", BASE)
+    monkeypatch.setattr(client, "_BACKOFF_BASE", 0)
 
 
 class TestVerifyByIsrc:
