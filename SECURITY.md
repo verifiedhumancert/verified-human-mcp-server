@@ -11,7 +11,7 @@
 If you discover a security vulnerability in this project, please report it
 privately — **do not open a public GitHub issue**.
 
-**Preferred channel:** [GitHub Private Vulnerability Reporting](https://github.com/verifiedhuman/verified-human-mcp-server/security/advisories/new)
+**Preferred channel:** [GitHub Private Vulnerability Reporting](https://github.com/verifiedhumancert/verified-human-mcp-server/security/advisories/new)
 
 **Alternative:** email `jj@verifiedhumancert.com` with:
 

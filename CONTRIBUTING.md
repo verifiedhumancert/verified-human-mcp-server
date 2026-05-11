@@ -12,7 +12,7 @@ By participating in this project, you agree to abide by our
 
 ### Reporting Bugs
 
-1. Check existing [issues](https://github.com/verifiedhuman/verified-human-mcp-server/issues)
+1. Check existing [issues](https://github.com/verifiedhumancert/verified-human-mcp-server/issues)
    to avoid duplicates
 2. Open a new issue using the **Bug Report** template
 3. Include steps to reproduce, expected vs. actual behavior, and environment details
@@ -66,5 +66,5 @@ See [README.md](README.md#development) for setup instructions.
 
 ## Questions?
 
-Open a [discussion](https://github.com/verifiedhuman/verified-human-mcp-server/discussions)
+Open a [discussion](https://github.com/verifiedhumancert/verified-human-mcp-server/discussions)
 or reach out at [verifiedhumancert.com](https://verifiedhumancert.com).
