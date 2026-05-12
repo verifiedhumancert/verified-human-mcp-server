@@ -35,11 +35,9 @@ build-backend = "poetry.core.masonry.api"
 testpaths = ["tests"]
 asyncio_mode = "auto"
 
-[dependency-groups]
-dev = [
-    "ruff (>=0.15.0,<1.0.0)",
-    "pytest (>=9.0.2,<10.0.0)",
-    "pytest-asyncio (>=1.0.0,<2.0.0)",
-    "respx (>=0.22.0,<1.0.0)",
-    "pytest-cov (>=6.0.0,<8.0.0)",
-]
+[tool.poetry.group.dev.dependencies]
+ruff = ">=0.15.0,<1.0.0"
+pytest = ">=9.0.2,<10.0.0"
+pytest-asyncio = ">=1.0.0,<2.0.0"
+respx = ">=0.22.0,<1.0.0"
+pytest-cov = ">=6.0.0,<8.0.0"
