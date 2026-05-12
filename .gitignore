@@ -8,6 +8,9 @@ dist/
 .env.*
 .ruff_cache/
 .pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
 .DS_Store
 *.log
 .idea/
