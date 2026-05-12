@@ -4,6 +4,8 @@ MCP server for querying the [Verified Human Cert](https://verifiedhumancert.com)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![CI](https://github.com/verifiedhumancert/verified-human-mcp-server/actions/workflows/ci.yml/badge.svg)](https://github.com/verifiedhumancert/verified-human-mcp-server/actions/workflows/ci.yml)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/)
+[![Code style: Ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://docs.astral.sh/ruff/)
 
 ## What is Verified Human Cert?
 
