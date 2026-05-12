@@ -8,7 +8,7 @@ MCP server for querying the [Verified Human Cert](https://verifiedhumancert.com)
 [![Code style: Ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://docs.astral.sh/ruff/)
 [![MCP](https://img.shields.io/badge/MCP-1.0+-purple.svg)](https://modelcontextprotocol.io/)
 [![Coverage](https://img.shields.io/badge/coverage-87%25-brightgreen.svg)](https://github.com/verifiedhumancert/verified-human-mcp-server/actions/workflows/ci.yml)
-[![Built by MusicTech Lab](https://www.musictechlab.io/oss/build-by-musictechlab.io.svg)](https://musictechlab.io)
+[![Built by MusicTech Lab](https://musictechlab.io/oss/build-by-musictechlab.io.svg)](https://musictechlab.io)
 
 ## What is Verified Human Cert?
 
